@@ -76,7 +76,7 @@ import os
 from pymongo import MongoClient
 from datetime import datetime
 import time
-
+import certifi
 # ---------------------------
 # Config
 # ---------------------------
@@ -120,8 +120,16 @@ STATE_COORDS = {
 # ---------------------------
 # MongoDB
 # ---------------------------
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-client = MongoClient(MONGO_URI)
+MONGO_URI = os.getenv("MONGO_URI")
+client = MongoClient(
+
+    MONGO_URI,
+
+    tls=True,
+
+    tlsCAFile=certifi.where()
+
+)
 db = client["disaster_db"]
 collection = db["weather_data"]
 

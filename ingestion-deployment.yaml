@@ -1,0 +1,61 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: ingestion
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: ingestion
+#  template:
+#    metadata:
+#      labels:
+#        app: ingestion
+#    spec:
+#      containers:
+#        - name: ingestion
+#          image: ingestion:latest
+#          imagePullPolicy: Never
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion
+    spec:
+      containers:
+        - name: ingestion
+          image: ingestion:latest
+          imagePullPolicy: Never
+
+          env:
+            - name: KAFKA_SERVER
+              value: "kafka:9092"
+
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          # Optional but useful
+          livenessProbe:
+            exec:
+              command: ["echo", "alive"]
+            initialDelaySeconds: 10
+            periodSeconds: 15
+
+          readinessProbe:
+            exec:
+              command: ["echo", "ready"]
+            initialDelaySeconds: 5
+            periodSeconds: 10

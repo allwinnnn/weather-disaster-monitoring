@@ -1,0 +1,50 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: consumer
+#spec:
+#  replicas: 1
+#  selector:
+#   matchLabels:
+#      app: consumer
+#  template:
+#    metadata:
+#      labels:
+#        app: consumer
+#    spec:
+#      containers:
+#        - name: consumer
+#          image: consumer:latest
+#          imagePullPolicy: Never
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer
+spec:
+  replicas: 1   # can scale later
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+        - name: consumer
+          image: consumer:latest
+          imagePullPolicy: Never
+
+          env:
+            - name: KAFKA_SERVER
+              value: "kafka:9092"
+            - name: MONGO_URI
+              value: "mongodb://mongodb:27017/"
+
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

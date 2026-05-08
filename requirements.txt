@@ -1,0 +1,6 @@
+kafka-python
+pymongo
+requests
+streamlit
+pandas
+certifi

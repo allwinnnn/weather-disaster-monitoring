@@ -1,0 +1,60 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: dashboard
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: dashboard
+#  template:
+#    metadata:
+#      labels:
+#        app: dashboard
+#    spec:
+#      containers:
+#        - name: dashboard
+#          image: dashboard:latest
+#          imagePullPolicy: Never
+#          ports:
+#            - containerPort: 8501
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: dashboard:latest
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8501
+
+          env:
+            - name: MONGO_URI
+              value: "mongodb://mongodb:27017/"
+
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          # Optional but good practice
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8501
+            initialDelaySeconds: 5
+            periodSeconds: 10
